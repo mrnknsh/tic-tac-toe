@@ -60,4 +60,18 @@ body{
     margin: 0 10px;
 }
 
+.player-choice-cross:hover{
+    transition: all 1s;
+    transform: rotate(180deg);
+    background-color: rebeccapurple;
+}
+
+.player-choice-null:hover{
+    transition: all 1s;
+    transform: rotate(-90deg);
+}
+
+
+
+
 /* @media */
