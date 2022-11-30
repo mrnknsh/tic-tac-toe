@@ -11,16 +11,29 @@ let playerStepCounter = 0;
 let computerStepCounter = 0;
 let stepActive; // player or computer
 let winCombinations = [
-    [1, 0, 0, 0, 1, 0, 0, 0, 1],
-    [0, 0, 1, 0, 1, 0, 1, 0, 0],
-    [1, 1, 1, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 1, 1, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 1, 1, 1],
-    [1, 0, 0, 1, 0, 0, 1, 0, 0],
-    [0, 1, 0, 0, 1, 0, 0, 1, 0],
-    [0, 0, 1, 0, 0, 1, 0, 0, 1]
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
 ];
 
+function checkWinner(move) {
+    let arr = 0
+    for (let i = 0; i < winCombinations.length; i++) {
+        for (let q = 0; q < winCombinations[i].length; q++) {
+            if (ourBoxAll[winCombinations[i][q]].className.includes(move)) {
+                arr += 1
+            }
+        }
+        if (arr === 3) {
+            console.log('Game over')
+        } else arr = 0
+    }
+}
 
 // function of choosing move
 function selectMove(selectedElement) {
@@ -33,23 +46,9 @@ function selectMove(selectedElement) {
         computer = 1
     }
     stepActive = Math.floor(Math.random() * 10) % 2 === 0 ? 'player' : 'computer'
-
-                    // вывод контейнера чей ход первый
+    alert(stepActive)
+    // вывод контейнера чей ход первый
 }
-
-                    // function checkWinner() {
-                    //     let checkWinCombinations = []
-                    //     ourBoxAll.forEach(elem => {
-                    //         if (elem.className.includes('cross')) {
-                    //             checkWinCombinations.push(1)
-                    //         } else checkWinCombinations.push(0)
-                    //     })
-                    //     for (let i = 0; i < winCombinations.length; i++) {
-                    //         if (JSON.stringify(winCombinations[i]) === JSON.stringify(checkWinCombinations)) {
-                    //             console.log('finish')
-                    //         } else console.log('game continues ')
-                    //     }
-                    // }
 
 //  function of checking is square empty
 function clickOnBox(activeElement) {
@@ -58,21 +57,27 @@ function clickOnBox(activeElement) {
             activeElement.dataset.enable = 'active';
             if (player === 1) {
                 activeElement.classList.add('box-cross');
+                checkWinner('cross')
             } else if (player === 0) {
                 activeElement.classList.add('box-null');
+                checkWinner('null')
             }
             playerStepCounter += 1
             stepActive = 'computer'
-                    // checkWinner()
         }
     }
 }
 
-                    // if(stepActive === 'computer'){
-                    //     computerStepCounter += 1
-                    //     stepActive = 'player'
-                    // }
-
+// if (stepActive === 'computer') {
+//     if(computer === 1){
+//         checkWinner('cross')
+//     }
+//     else if(computer === 0){
+//         checkWinner('null')
+//     }
+//     computerStepCounter += 1
+//     stepActive = 'player'
+// }
 
 ourChoicesAll.forEach(elem => {
     elem.addEventListener('click', function () {
@@ -85,6 +90,8 @@ ourBoxAll.forEach(elem => {
         clickOnBox(elem);
     })
 })
+
+
 
 
 // function (){}  - обычная
