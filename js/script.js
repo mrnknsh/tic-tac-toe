@@ -1,14 +1,12 @@
 // playing field
 const ourBoxAll = document.querySelectorAll('.box-outer');
-// block of choosing a move
+// block of choosing a step
 const selectionBlock = document.querySelector('.selection-block')
-// variety of moves
+// variety of step
 const ourChoicesAll = document.querySelectorAll('.player-choice')
 // cross = 1 , null = 0;
 let player;
 let computer;
-let playerStepCounter = 0;
-let computerStepCounter = 0;
 let stepActive; // player or computer
 let winCombinations = [
     [0, 1, 2],
@@ -21,22 +19,65 @@ let winCombinations = [
     [2, 4, 6]
 ];
 
-function checkWinner(move) {
+function checkWinner(step) {
     let arr = 0
     for (let i = 0; i < winCombinations.length; i++) {
         for (let q = 0; q < winCombinations[i].length; q++) {
-            if (ourBoxAll[winCombinations[i][q]].className.includes(move)) {
+            if (ourBoxAll[winCombinations[i][q]].className.includes(step)) {
                 arr += 1
             }
         }
         if (arr === 3) {
+            stepActive = ''
             console.log('Game over')
         } else arr = 0
     }
 }
 
-// function of choosing move
-function selectMove(selectedElement) {
+function checkingEnd() {
+    let checkingArr = 0;
+    ourBoxAll.forEach(elem => {
+        if (elem.dataset.enable === 'passive') {
+            checkingArr += 1
+        }
+    })
+    if (checkingArr === 0) {
+        stepActive = ''
+        console.log('GameOver')
+    }
+}
+
+
+// let check = ourBoxAll.every(function(elem) {
+//     return !!(elem.includes('cross') || elem.includes('null'));
+// });
+//
+// console.log(our);
+
+function doComputer() {
+    if (stepActive === 'computer') {
+        let stepsVariety = []
+        ourBoxAll.forEach((elem, index) => {
+            if (elem.dataset.enable === 'passive') {
+                stepsVariety.push(index)
+            }
+        })
+        let step = Math.floor(Math.random() * (stepsVariety.length) - 1) + 1
+        ourBoxAll[stepsVariety[step]].dataset.enable = 'active'
+        if (computer === 1) {
+            ourBoxAll[stepsVariety[step]].classList.add('box-cross')
+        } else if (computer === 0) {
+            ourBoxAll[stepsVariety[step]].classList.add('box-null')
+        }
+        stepActive = 'player'
+        checkWinner('cross')
+        checkWinner('null')
+        checkingEnd()
+    }
+}
+
+// function of choosing step
+function selectStep(selectedElement) {
     selectionBlock.style.display = 'none';
     if (selectedElement.dataset.playerChoice === 'X') {
         player = 1;
@@ -46,7 +87,8 @@ function selectMove(selectedElement) {
         computer = 1
     }
     stepActive = Math.floor(Math.random() * 10) % 2 === 0 ? 'player' : 'computer'
-    alert(stepActive)
+    console.log(stepActive)
+    setTimeout(doComputer, 2500)
     // вывод контейнера чей ход первый
 }
 
@@ -57,31 +99,22 @@ function clickOnBox(activeElement) {
             activeElement.dataset.enable = 'active';
             if (player === 1) {
                 activeElement.classList.add('box-cross');
-                checkWinner('cross')
             } else if (player === 0) {
                 activeElement.classList.add('box-null');
-                checkWinner('null')
             }
-            playerStepCounter += 1
             stepActive = 'computer'
+            checkWinner('cross')
+            checkWinner('null')
+            checkingEnd()
+            setTimeout(doComputer, 2500)
         }
     }
 }
 
-// if (stepActive === 'computer') {
-//     if(computer === 1){
-//         checkWinner('cross')
-//     }
-//     else if(computer === 0){
-//         checkWinner('null')
-//     }
-//     computerStepCounter += 1
-//     stepActive = 'player'
-// }
 
 ourChoicesAll.forEach(elem => {
     elem.addEventListener('click', function () {
-        selectMove(elem)
+        selectStep(elem)
     })
 })
 
@@ -90,8 +123,6 @@ ourBoxAll.forEach(elem => {
         clickOnBox(elem);
     })
 })
-
-
 
 
 // function (){}  - обычная
