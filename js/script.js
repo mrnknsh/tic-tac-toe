@@ -1,5 +1,7 @@
 // playing field
 const ourBoxAll = document.querySelectorAll('.box-outer');
+const infoContainer = document.querySelector('.info-container')
+const firstStep = document.querySelector('.first-step')
 // block of choosing a step
 const selectionBlock = document.querySelector('.selection-block')
 // variety of step
@@ -19,40 +21,38 @@ let winCombinations = [
     [2, 4, 6]
 ];
 
-function checkWinner(step) {
-    let arr = 0
+function gameOverCheck(step) {
+    let checkingVictory = 0
     for (let i = 0; i < winCombinations.length; i++) {
         for (let q = 0; q < winCombinations[i].length; q++) {
             if (ourBoxAll[winCombinations[i][q]].className.includes(step)) {
-                arr += 1
+                checkingVictory += 1
             }
         }
-        if (arr === 3) {
+                if (checkingVictory === 3) {
             stepActive = ''
-            console.log('Game over')
-        } else arr = 0
+            console.log('Победа')
+            break
+        } else {
+            checkingVictory = 0
+        }
     }
-}
 
-function checkingEnd() {
-    let checkingArr = 0;
+    let checkingEnd = 0;
     ourBoxAll.forEach(elem => {
         if (elem.dataset.enable === 'passive') {
-            checkingArr += 1
+            checkingEnd += 1
         }
     })
-    if (checkingArr === 0) {
+    if (checkingEnd === 0) {
         stepActive = ''
         console.log('GameOver')
     }
 }
 
-
 // let check = ourBoxAll.every(function(elem) {
 //     return !!(elem.includes('cross') || elem.includes('null'));
 // });
-//
-// console.log(our);
 
 function doComputer() {
     if (stepActive === 'computer') {
@@ -66,19 +66,19 @@ function doComputer() {
         ourBoxAll[stepsVariety[step]].dataset.enable = 'active'
         if (computer === 1) {
             ourBoxAll[stepsVariety[step]].classList.add('box-cross')
+            gameOverCheck('cross')
         } else if (computer === 0) {
             ourBoxAll[stepsVariety[step]].classList.add('box-null')
+            gameOverCheck('null')
         }
-        stepActive = 'player'
-        checkWinner('cross')
-        checkWinner('null')
-        checkingEnd()
+        if (stepActive !== '') {
+            stepActive = 'player'
+        }
     }
 }
 
 // function of choosing step
 function selectStep(selectedElement) {
-    selectionBlock.style.display = 'none';
     if (selectedElement.dataset.playerChoice === 'X') {
         player = 1;
         computer = 0
@@ -88,7 +88,16 @@ function selectStep(selectedElement) {
     }
     stepActive = Math.floor(Math.random() * 10) % 2 === 0 ? 'player' : 'computer'
     console.log(stepActive)
-    setTimeout(doComputer, 2500)
+    selectionBlock.style.display = 'none';
+    if(stepActive === 'player'){
+        firstStep.classList.add('player-step')
+    }
+    else firstStep.classList.add('computer-step')
+    setTimeout(() => infoContainer.classList.add('a'), 1000)
+    setTimeout(() => infoContainer.style.display = 'none', 2100)
+    // setTimeout(doComputer, 2500)
+    doComputer()
+
     // вывод контейнера чей ход первый
 }
 
@@ -99,15 +108,17 @@ function clickOnBox(activeElement) {
             activeElement.dataset.enable = 'active';
             if (player === 1) {
                 activeElement.classList.add('box-cross');
+                gameOverCheck('cross');
             } else if (player === 0) {
                 activeElement.classList.add('box-null');
+                gameOverCheck('null')
             }
-            stepActive = 'computer'
-            checkWinner('cross')
-            checkWinner('null')
-            checkingEnd()
-            setTimeout(doComputer, 2500)
         }
+        if (stepActive !== '') {
+            stepActive = 'computer'
+        }
+        // setTimeout(doComputer, 2500)
+        doComputer()
     }
 }
 

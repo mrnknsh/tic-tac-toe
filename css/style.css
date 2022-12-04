@@ -1,25 +1,33 @@
-body{
+body {
     margin: 0;
     padding: 0;
+    background-color: #d195ff;
 }
+
 #container-outer {
     width: 100%;
+    height: 1vh;
 }
+
 .container-item {
-    border: 1px solid red;
-    width: 607px;
-    height: 607px;
-    margin: auto;
+    width: 600px;
+    height: 600px;
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-between;
+    position: fixed;
+    top: calc(50% - 300px);
+    left: calc(50% - 300px);
 }
+
 .box-outer {
-    width: 200px;
-    height: 200px;
-    flex-grow: 1;
-    position: relative;
-    border: 1px dotted blue;
+    width: 194px;
+    height: 194px;
+    background-color: #FFFFFF;
+    border-radius: 30px;
+    border: 1px solid #FFFFFF;
 }
+
 .box-cross::after {
     content: 'X';
     font-size: 140px;
@@ -29,6 +37,7 @@ body{
     animation-duration: 1s;
     animation-name: ascent;
 }
+
 .box-null::after {
     content: 'O';
     font-size: 140px;
@@ -40,38 +49,78 @@ body{
 }
 
 @keyframes ascent {
-    from {opacity: 0;}
-    to {opacity: 1;}
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
-.selection-block{
+
+.info-container {
     position: absolute;
-    top: 30%;
+    top: calc(50% - 150px);
     left: calc(50% - 154px);
-    border: 2px solid black;
+    border: 2px solid #a648ff;
     background-color: white;
     width: 260px;
-    padding: 0 24px 24px;
+    height: 140px;
+    padding: 0 24px;
     text-align: center;
     font-size: 1.5em;
 }
-.player-choice{
-    padding: 5px 30px;
+
+.player-choice {
+    padding: 7px 35px;
     font-family: serif;
     margin: 0 10px;
+    background-color: #a648ff;
+    border: 2px solid #a648ff;
+    border-radius: 15px;
 }
 
-.player-choice-cross:hover{
+.player-choice:hover {
     transition: all 1s;
     transform: rotate(180deg);
-    background-color: rebeccapurple;
+    background-color: #FFFFFF;
+    cursor: pointer;
 }
 
-.player-choice-null:hover{
-    transition: all 1s;
-    transform: rotate(-90deg);
+.computer-step::after, .player-step::after {
+    position: relative;
+    top: 50px;
+    animation-duration: 1000ms;
+    animation-name: firstStep;
+}
+
+.player-step::after {
+    content: 'Ваш ход!';
+}
+
+.computer-step::after {
+    content: 'Ход компьютера!';
+}
+
+@keyframes firstStep {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.a {
+    animation-duration: 1500ms;
+    animation-name: disappearance;
+}
+@keyframes disappearance {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
 }
 
 
-
-
-/* @media */
