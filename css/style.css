@@ -26,9 +26,28 @@ body {
     background-color: #FFFFFF;
     border-radius: 30px;
     border: 1px solid #FFFFFF;
+    position: relative;
+    /*animation-duration: 4s;*/
+    /*animation-name: repeat;*/
 }
 
-.box-cross::after {
+/*@keyframes repeat {*/
+/*    0% {*/
+/*        opacity: 0;*/
+/*    }*/
+/*    34%{*/
+/*        opacity: 1;*/
+/*    }*/
+/*    68%{*/
+/*        opacity: 0;*/
+/*    }*/
+/*    100%{*/
+/*        opacity: 1;*/
+/*    }*/
+/*}*/
+
+
+.box-cross::before {
     content: 'X';
     font-size: 140px;
     position: relative;
@@ -38,7 +57,7 @@ body {
     animation-name: ascent;
 }
 
-.box-null::after {
+.box-null::before {
     content: 'O';
     font-size: 140px;
     position: relative;
@@ -70,7 +89,7 @@ body {
     font-size: 1.5em;
 }
 
-.player-choice {
+.player-choice, .repeat {
     padding: 7px 35px;
     font-family: serif;
     margin: 0 10px;
@@ -79,48 +98,115 @@ body {
     border-radius: 15px;
 }
 
-.player-choice:hover {
-    transition: all 1s;
+.player-choice:hover{
+    transition: 1s;
     transform: rotate(180deg);
     background-color: #FFFFFF;
     cursor: pointer;
 }
 
-.computer-step::after, .player-step::after {
+.repeat{
+    display: none;
+    padding: 7px 20px;
     position: relative;
-    top: 50px;
+}
+
+.repeat:hover{
+    cursor: pointer;
+    background-color: #FFFFFF;
+    transition: all 1s;
+}
+
+/*.computer-step::after, .player-step::after{*/
+/*    position: relative;*/
+/*    top: 50px;*/
+/*    !*animation-duration: 1000ms;*!*/
+/*    !*animation-name: firstStep;*!*/
+/*}*/
+
+/*.player-step::after {*/
+/*    content: 'Ваш ход!';*/
+/*}*/
+
+/*.computer-step::after {*/
+/*    content: 'Ход компьютера!';*/
+/*}*/
+
+/*.info{*/
+/*    padding: 50px 0;*/
+/*}*/
+
+/*.gameOver::after{*/
+/*    position: relative;*/
+/*    top: 24px;*/
+/*    content: 'Конец игры!'*/
+/*}*/
+
+/*@keyframes firstStep {*/
+/*    from {*/
+/*        opacity: 0;*/
+/*    }*/
+/*    to {*/
+/*        opacity: 1;*/
+/*    }*/
+/*}*/
+
+.vertical-line::after{
+    content: '';
+    width: 4px;
+    position: absolute;
+    top: -20px;
+    bottom: -16px;
+    background-color: #a648ff;
+    left: 50%;
+}
+
+.horizontal-line::after{
+    content: '';
+    height: 4px;
+    position: absolute;
+    left: -20px;
+    right: -16px;
+    background-color: #a648ff;
+    top: 50%;
+}
+
+.tilt-up::after{
+    content: '';
+    width: 4px;
+    position: absolute;
+    top: -45px;
+    bottom: -46px;
+    left: 50%;
+    background-color: #a648ff;
+    transform: rotate(45.3deg);
+}
+
+.tilt-down::after{
+    content: '';
+    width: 4px;
+    position: absolute;
+    top: -45px;
+    bottom: -46px;
+    left: 50%;
+    background-color: #a648ff;
+    transform: rotate(-45.3deg);
+}
+
+.vertical-line::after, .horizontal-line::after, .tilt-up::after, .tilt-down::after{
     animation-duration: 1000ms;
-    animation-name: firstStep;
+    animation-name: line;
 }
 
-.player-step::after {
-    content: 'Ваш ход!';
-}
-
-.computer-step::after {
-    content: 'Ход компьютера!';
-}
-
-@keyframes firstStep {
-    from {
+@keyframes line {
+    from{
         opacity: 0;
     }
-    to {
+    to{
         opacity: 1;
     }
 }
 
-.a {
-    animation-duration: 1500ms;
-    animation-name: disappearance;
-}
-@keyframes disappearance {
-    from {
-        opacity: 1;
-    }
-    to {
-        opacity: 0;
-    }
-}
+
 
 

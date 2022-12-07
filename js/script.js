@@ -1,16 +1,18 @@
 // playing field
 const ourBoxAll = document.querySelectorAll('.box-outer');
 const infoContainer = document.querySelector('.info-container')
-const firstStep = document.querySelector('.first-step')
+const info = document.querySelector('.info')
 // block of choosing a step
 const selectionBlock = document.querySelector('.selection-block')
 // variety of step
 const ourChoicesAll = document.querySelectorAll('.player-choice')
 // cross = 1 , null = 0;
+const repeatBtn = document.querySelector('.repeat')
+let winner;
 let player;
 let computer;
 let stepActive; // player or computer
-let winCombinations = [
+const winCombinations = [
     [0, 1, 2],
     [3, 4, 5],
     [6, 7, 8],
@@ -29,24 +31,48 @@ function gameOverCheck(step) {
                 checkingVictory += 1
             }
         }
-                if (checkingVictory === 3) {
+        if (checkingVictory === 3) {
+            for (let a = 0; a < winCombinations[i].length; a++) {
+                if (i === 0 || i === 1 || i === 2) {
+                    setTimeout(() => ourBoxAll[winCombinations[i][a]].classList.add('horizontal-line'), 500)
+                } else if (i === 3 || i === 4 || i === 5) {
+                    setTimeout(() => ourBoxAll[winCombinations[i][a]].classList.add('vertical-line'), 500)
+                } else if (i === 6) {
+                    setTimeout(() => ourBoxAll[winCombinations[i][a]].classList.add('tilt-down'), 500)
+                } else {
+                    setTimeout(() => ourBoxAll[winCombinations[i][a]].classList.add('tilt-up'), 500)
+                }
+            }
+            winner = stepActive === 'player' ? 'Вы победили!' : 'Победил компьютер!';
+            // let a = stepActive === 'player' ? player : computer;
             stepActive = ''
-            console.log('Победа')
+            setTimeout(() => {
+                infoContainer.style.display = 'block'
+                info.style.padding = '24px 0'
+                // winner = a === 1 ? "крестики" : 'нолики';
+                info.innerHTML = winner
+                repeatBtn.style.display = 'inline-block'
+            }, 1500)
             break
         } else {
             checkingVictory = 0
         }
     }
 
-    let checkingEnd = 0;
-    ourBoxAll.forEach(elem => {
-        if (elem.dataset.enable === 'passive') {
-            checkingEnd += 1
+    if (checkingVictory !== 3) {
+        let checkingEnd = 0;
+        ourBoxAll.forEach(elem => {
+            if (elem.dataset.enable === 'passive') {
+                checkingEnd += 1
+            }
+        })
+        if (checkingEnd === 0) {
+            stepActive = ''
+            infoContainer.style.display = 'block'
+            info.style.padding = '24px 0'
+            info.innerHTML = 'Конец игры!'
+            repeatBtn.style.display = 'inline-block'
         }
-    })
-    if (checkingEnd === 0) {
-        stepActive = ''
-        console.log('GameOver')
     }
 }
 
@@ -87,18 +113,19 @@ function selectStep(selectedElement) {
         computer = 1
     }
     stepActive = Math.floor(Math.random() * 10) % 2 === 0 ? 'player' : 'computer'
-    console.log(stepActive)
     selectionBlock.style.display = 'none';
-    if(stepActive === 'player'){
-        firstStep.classList.add('player-step')
+    if (stepActive === 'player') {
+        info.innerHTML = 'Ваш ход!'
+        info.style.padding = '50px 0'
+    } else {
+        info.innerHTML = 'Ход компьютера!'
+        info.style.padding = '50px 0'
     }
-    else firstStep.classList.add('computer-step')
-    setTimeout(() => infoContainer.classList.add('a'), 1000)
-    setTimeout(() => infoContainer.style.display = 'none', 2100)
-    // setTimeout(doComputer, 2500)
-    doComputer()
-
-    // вывод контейнера чей ход первый
+    setTimeout(() => {
+        infoContainer.style.display = 'none';
+        info.innerHTML = ''
+    }, 1500)
+    setTimeout(doComputer, 2500)
 }
 
 //  function of checking is square empty
@@ -117,11 +144,9 @@ function clickOnBox(activeElement) {
         if (stepActive !== '') {
             stepActive = 'computer'
         }
-        // setTimeout(doComputer, 2500)
-        doComputer()
+        setTimeout(doComputer, 2500)
     }
 }
-
 
 ourChoicesAll.forEach(elem => {
     elem.addEventListener('click', function () {
@@ -132,6 +157,22 @@ ourChoicesAll.forEach(elem => {
 ourBoxAll.forEach(elem => {
     elem.addEventListener('click', function () {
         clickOnBox(elem);
+    })
+})
+
+repeatBtn.addEventListener('click', () => {
+    selectionBlock.style.display = 'block'
+    repeatBtn.style.display = 'none'
+    info.classList.remove('gameOver')
+    ourBoxAll.forEach(elem => {
+        elem.dataset.enable = 'passive';
+        info.innerHTML = ''
+        elem.classList.remove('box-cross')
+        elem.classList.remove('box-null')
+        elem.classList.remove('vertical-line')
+        elem.classList.remove('horizontal-line')
+        elem.classList.remove('tilt-up')
+        elem.classList.remove('tilt-down')
     })
 })
 
