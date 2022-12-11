@@ -22,6 +22,7 @@ const winCombinations = [
     [0, 4, 8],
     [2, 4, 6]
 ];
+let computerStepAfterChecking = true;
 
 function gameOverCheck(step) {
     let checkingVictory = 0
@@ -80,22 +81,62 @@ function gameOverCheck(step) {
 //     return !!(elem.includes('cross') || elem.includes('null'));
 // });
 
-function doComputer() {
-    if (stepActive === 'computer') {
-        let stepsVariety = []
-        ourBoxAll.forEach((elem, index) => {
-            if (elem.dataset.enable === 'passive') {
-                stepsVariety.push(index)
+function logicalStep(mark, playerMark, computerMark) {
+    let checkingStep = 0
+    if (computer === mark) {
+        for (let i = 0; i < winCombinations.length; i++) {
+            console.log(`i= ${i}`)
+            for (let q = 0; q < winCombinations[i].length; q++) {
+                if (ourBoxAll[winCombinations[i][q]].className.includes(playerMark)) {
+                    console.log(winCombinations[i][q])
+                    checkingStep += 1
+                }
             }
-        })
-        let step = Math.floor(Math.random() * (stepsVariety.length) - 1) + 1
-        ourBoxAll[stepsVariety[step]].dataset.enable = 'active'
-        if (computer === 1) {
-            ourBoxAll[stepsVariety[step]].classList.add('box-cross')
-            gameOverCheck('cross')
-        } else if (computer === 0) {
-            ourBoxAll[stepsVariety[step]].classList.add('box-null')
-            gameOverCheck('null')
+            if (checkingStep === 2) {
+                for (let x = 0; x < winCombinations[i].length; x++) {
+                    if (ourBoxAll[winCombinations[i][x]].dataset.enable === 'passive') {
+                        ourBoxAll[winCombinations[i][x]].classList.add(computerMark);
+                        ourBoxAll[winCombinations[i][x]].dataset.enable = 'active'
+                        computerStepAfterChecking = false
+                        checkingStep = 0
+                        break
+                    }
+                }
+            }
+            checkingStep = 0
+            if (!computerStepAfterChecking) {
+                break
+            }
+        }
+    }
+    if (computer === 0) {
+        gameOverCheck('null')
+    } else if (computer === 1) {
+        gameOverCheck('cross')
+    }
+
+}
+
+function computerStep() {
+    if (stepActive === 'computer') {
+        logicalStep(1, 'box-null', 'box-cross')
+        logicalStep(0, 'box-cross', 'box-null')
+        if (computerStepAfterChecking === true) {
+            let stepsVariety = []
+            ourBoxAll.forEach((elem, index) => {
+                if (elem.dataset.enable === 'passive') {
+                    stepsVariety.push(index)
+                }
+            })
+            let step = Math.floor(Math.random() * (stepsVariety.length) - 1) + 1
+            ourBoxAll[stepsVariety[step]].dataset.enable = 'active'
+            if (computer === 1) {
+                ourBoxAll[stepsVariety[step]].classList.add('box-cross')
+                gameOverCheck('cross')
+            } else if (computer === 0) {
+                ourBoxAll[stepsVariety[step]].classList.add('box-null')
+                gameOverCheck('null')
+            }
         }
         if (stepActive !== '') {
             stepActive = 'player'
@@ -125,7 +166,8 @@ function selectStep(selectedElement) {
         infoContainer.style.display = 'none';
         info.innerHTML = ''
     }, 1500)
-    setTimeout(doComputer, 2500)
+    // setTimeout(computerStep, 2500)
+    computerStep()
 }
 
 //  function of checking is square empty
@@ -144,7 +186,9 @@ function clickOnBox(activeElement) {
         if (stepActive !== '') {
             stepActive = 'computer'
         }
-        setTimeout(doComputer, 2500)
+        computerStepAfterChecking = true
+        setTimeout(computerStep, 2500)
+        computerStep()
     }
 }
 
