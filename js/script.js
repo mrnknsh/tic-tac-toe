@@ -85,10 +85,8 @@ function logicalStep(mark, playerMark, computerMark) {
     let checkingStep = 0
     if (computer === mark) {
         for (let i = 0; i < winCombinations.length; i++) {
-            console.log(`i= ${i}`)
             for (let q = 0; q < winCombinations[i].length; q++) {
                 if (ourBoxAll[winCombinations[i][q]].className.includes(playerMark)) {
-                    console.log(winCombinations[i][q])
                     checkingStep += 1
                 }
             }
@@ -114,13 +112,14 @@ function logicalStep(mark, playerMark, computerMark) {
     } else if (computer === 1) {
         gameOverCheck('cross')
     }
-
 }
 
 function computerStep() {
     if (stepActive === 'computer') {
         logicalStep(1, 'box-null', 'box-cross')
         logicalStep(0, 'box-cross', 'box-null')
+        logicalStep(1, 'box-cross', 'box-cross')
+        logicalStep(0, 'box-null', 'box-null')
         if (computerStepAfterChecking === true) {
             let stepsVariety = []
             ourBoxAll.forEach((elem, index) => {
@@ -144,6 +143,28 @@ function computerStep() {
     }
 }
 
+function playerStep(activeElement) {
+    if (stepActive === 'player') {
+        if (activeElement.dataset.enable === 'passive') {
+            activeElement.dataset.enable = 'active';
+            if (player === 1) {
+                activeElement.classList.add('box-cross');
+                gameOverCheck('cross');
+            } else if (player === 0) {
+                activeElement.classList.add('box-null');
+                gameOverCheck('null')
+            }
+            if (stepActive !== '') {
+                stepActive = 'computer'
+                computerStepAfterChecking = true
+            }
+        } else {
+            playerStep(activeElement)
+        }
+    }
+}
+
+
 // function of choosing step
 function selectStep(selectedElement) {
     if (selectedElement.dataset.playerChoice === 'X') {
@@ -166,30 +187,13 @@ function selectStep(selectedElement) {
         infoContainer.style.display = 'none';
         info.innerHTML = ''
     }, 1500)
-    // setTimeout(computerStep, 2500)
-    computerStep()
+    setTimeout(computerStep, 2500)
 }
 
-//  function of checking is square empty
+//  player step
 function clickOnBox(activeElement) {
-    if (stepActive === 'player') {
-        if (activeElement.dataset.enable === 'passive') {
-            activeElement.dataset.enable = 'active';
-            if (player === 1) {
-                activeElement.classList.add('box-cross');
-                gameOverCheck('cross');
-            } else if (player === 0) {
-                activeElement.classList.add('box-null');
-                gameOverCheck('null')
-            }
-        }
-        if (stepActive !== '') {
-            stepActive = 'computer'
-        }
-        computerStepAfterChecking = true
-        setTimeout(computerStep, 2500)
-        computerStep()
-    }
+    playerStep(activeElement)
+    setTimeout(computerStep, 2500)
 }
 
 ourChoicesAll.forEach(elem => {
