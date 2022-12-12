@@ -83,7 +83,7 @@ function gameOverCheck(step) {
 
 function logicalStep(mark, playerMark, computerMark) {
     let checkingStep = 0
-    if (computer === mark) {
+    if (computer === mark && computerStepAfterChecking === true) {
         for (let i = 0; i < winCombinations.length; i++) {
             for (let q = 0; q < winCombinations[i].length; q++) {
                 if (ourBoxAll[winCombinations[i][q]].className.includes(playerMark)) {
@@ -116,10 +116,10 @@ function logicalStep(mark, playerMark, computerMark) {
 
 function computerStep() {
     if (stepActive === 'computer') {
-        logicalStep(1, 'box-null', 'box-cross')
-        logicalStep(0, 'box-cross', 'box-null')
         logicalStep(1, 'box-cross', 'box-cross')
         logicalStep(0, 'box-null', 'box-null')
+        logicalStep(1, 'box-null', 'box-cross')
+        logicalStep(0, 'box-cross', 'box-null')
         if (computerStepAfterChecking === true) {
             let stepsVariety = []
             ourBoxAll.forEach((elem, index) => {
@@ -154,9 +154,9 @@ function playerStep(activeElement) {
                 activeElement.classList.add('box-null');
                 gameOverCheck('null')
             }
+            computerStepAfterChecking = true
             if (stepActive !== '') {
                 stepActive = 'computer'
-                computerStepAfterChecking = true
             }
         } else {
             playerStep(activeElement)
@@ -165,7 +165,6 @@ function playerStep(activeElement) {
 }
 
 
-// function of choosing step
 function selectStep(selectedElement) {
     if (selectedElement.dataset.playerChoice === 'X') {
         player = 1;
@@ -190,7 +189,7 @@ function selectStep(selectedElement) {
     setTimeout(computerStep, 2500)
 }
 
-//  player step
+
 function clickOnBox(activeElement) {
     playerStep(activeElement)
     setTimeout(computerStep, 2500)
@@ -222,6 +221,7 @@ repeatBtn.addEventListener('click', () => {
         elem.classList.remove('tilt-up')
         elem.classList.remove('tilt-down')
     })
+    computerStepAfterChecking = true
 })
 
 
