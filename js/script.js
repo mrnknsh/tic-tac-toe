@@ -116,6 +116,7 @@ function logicalStep(mark, playerMark, computerMark) {
 
 function computerStep() {
     if (stepActive === 'computer') {
+        document.querySelector('.before-blackout').classList.remove('blackout')
         logicalStep(1, 'box-cross', 'box-cross')
         logicalStep(0, 'box-null', 'box-null')
         logicalStep(1, 'box-null', 'box-cross')
@@ -144,6 +145,7 @@ function computerStep() {
 }
 
 function playerStep(activeElement) {
+
     if (stepActive === 'player') {
         if (activeElement.dataset.enable === 'passive') {
             activeElement.dataset.enable = 'active';
@@ -192,6 +194,9 @@ function selectStep(selectedElement) {
 
 function clickOnBox(activeElement) {
     playerStep(activeElement)
+    if(stepActive === 'computer'){
+        document.querySelector('.before-blackout').classList.add('blackout')
+    }
     setTimeout(computerStep, 2500)
 }
 

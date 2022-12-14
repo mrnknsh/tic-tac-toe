@@ -6,7 +6,7 @@ body {
 
 #container-outer {
     width: 100%;
-    height: 1vh;
+    /*height: 1vh;*/
 }
 
 .container-item {
@@ -15,7 +15,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    position: fixed;
+    position: absolute;
     top: calc(50% - 300px);
     left: calc(50% - 300px);
 }
@@ -27,24 +27,25 @@ body {
     border-radius: 30px;
     border: 1px solid #FFFFFF;
     position: relative;
-    /*animation-duration: 4s;*/
-    /*animation-name: repeat;*/
+    animation-duration: 4s;
+    animation-name: repeat;
 }
 
-/*@keyframes repeat {*/
-/*    0% {*/
-/*        opacity: 0;*/
-/*    }*/
-/*    34%{*/
-/*        opacity: 1;*/
-/*    }*/
-/*    68%{*/
-/*        opacity: 0;*/
-/*    }*/
-/*    100%{*/
-/*        opacity: 1;*/
-/*    }*/
-/*}*/
+@keyframes repeat {
+    0% {
+        opacity: 0;
+    }
+    33%{
+        opacity: 1;
+    }
+    66%{
+        opacity: 0;
+    }
+    100%{
+        opacity: 1;
+    }
+
+}
 
 
 .box-cross::before {
@@ -120,40 +121,6 @@ body {
     transition: all 1s;
 }
 
-/*.computer-step::after, .player-step::after{*/
-/*    position: relative;*/
-/*    top: 50px;*/
-/*    !*animation-duration: 1000ms;*!*/
-/*    !*animation-name: firstStep;*!*/
-/*}*/
-
-/*.player-step::after {*/
-/*    content: 'Ваш ход!';*/
-/*}*/
-
-/*.computer-step::after {*/
-/*    content: 'Ход компьютера!';*/
-/*}*/
-
-/*.info{*/
-/*    padding: 50px 0;*/
-/*}*/
-
-/*.gameOver::after{*/
-/*    position: relative;*/
-/*    top: 24px;*/
-/*    content: 'Конец игры!'*/
-/*}*/
-
-/*@keyframes firstStep {*/
-/*    from {*/
-/*        opacity: 0;*/
-/*    }*/
-/*    to {*/
-/*        opacity: 1;*/
-/*    }*/
-/*}*/
-
 .vertical-line::after {
     content: '';
     width: 4px;
@@ -210,43 +177,42 @@ body {
     }
 }
 
-.thinking::after {
-    content: 'Думаю..';
-    color: #a648ff;
-    font-size: 2rem;
-    text-align: center;
-    position: absolute;
-    top: 46%;
+.before-blackout{
+    display: none;
+}
+
+.blackout{
     width: 600px;
-    height: 594px;
-    animation-duration: 2000ms;
+    height: 596px;
+    border-radius: 30px;
+    background-color: rgba(169, 169, 169, 0.5);
+    position: absolute;
+    top: calc(50% - 300px);
+    left: calc(50% - 300px);
+    display: block;
+    opacity: 0;
+    animation-duration: 2100ms;
     animation-name: thinking;
 }
 
-@keyframes thinking-item {
-    0% {
-        display: none;
-    }
-    100% {
-        display: block;
-    }
+.blackout::after{
+    content: 'Думаю..';
+    color: #a648ff;
+    font-size: 2.5rem;
+    position: relative;
+    top: 34%;
+    left: calc(50% - 68px);
 }
 
-.thinking-item {
-    background-color: rgba(220, 220, 220, 0.9);
-    border-radius: 30px;
-    animation-duration: 2000ms;
-    animation-name: thinking-item;
-}
-@keyframes thinking-item {
+@keyframes thinking {
     0% {
-        background-color: #FFFFFF;
+        opacity: 0;
     }
     50% {
-        background-color: rgba(220, 220, 220, 0.9);
+        opacity: 1;
     }
     100% {
-        background-color: #FFFFFF;
+        opacity: 0;
     }
 }
 
